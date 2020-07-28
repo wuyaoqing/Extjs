@@ -83,7 +83,13 @@
 				// panel3.addListener('close',function(){
 				// 			console.log('关闭3。。。')
 				// 		});	
-				panel3.close()
+				//panel3.close()
+				
+				
+				//Cookies
+				Ext.util.Cookies.set('key','value',new Date(2020,6,24,17,12));
+				console.log(Ext.util.Cookies.get('key'));
+				 
 				
 			});
 			
