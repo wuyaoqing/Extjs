@@ -1,0 +1,15 @@
+.user{
+    background:url('../images/icons/fam/user.gif') no-repeat center center;
+}
+.add{
+    background:url('../images/icons/fam/user_add.png') no-repeat center center;
+}
+.edit{
+    background:url('../images/icons/fam/user_edit.png') no-repeat center center;
+}
+.delete{
+    background:url('../images/icons/fam/user_delete.gif') no-repeat center center;
+}
+.reload{
+    background:url('../images/icons/fam/table_refresh.png') no-repeat center center;
+}

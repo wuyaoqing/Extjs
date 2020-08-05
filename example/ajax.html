@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ExtJs5.1测试</title>
+		<!-- 样式文件 -->
+		<link href="../ext/neptune/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+		<!-- 核心文件 -->
+		<script src="../ext/ext-all-debug.js"></script>
+		<!-- 中文包 -->
+		<script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
+	</head>
+	<body>
+
+		
+		<script type="text/javascript">
+			'use strict'
+			// 初始化组件
+			Ext.onReady(function() {
+				//创建get请求按钮
+				Ext.create('Ext.button.Button',{
+					text:'Get请求',
+					margin:10,
+					renderTo:Ext.getBody(),
+					handler:function(){
+						//ajax请求
+						Ext.Ajax.request({
+							method:'GET',  //请求方式大写
+							url:'http://127.0.0.1:53261/api/Default/TestConnect2',  //请求地址TestConnect/TestConnect2
+							params :{
+								age:18,
+								name:'qing'
+							},
+							timeout:6000,
+							failure: function(response, opts) {
+							        console.log(response.status);//状态码
+							},
+							success:function(response, opts){
+								var text = response.responseText;
+								var obj = Ext.decode(text); //Ext.JSON.decode的简写形式解码（解析）JSON字符串对象
+								//console.log(typeof text); //string 返回的是string类型
+								//console.log(typeof obj); //object
+								//console.log(text);//{"Flag":"OK","Msg":"TestConnect连接成功:2020-08-05 15:57:10","Data":null}
+								console.log(obj.Msg); 
+							}
+						})
+					}
+				});
+				//创建post请求按钮
+				Ext.create('Ext.button.Button',{
+					text:'post请求',
+					margin:10,
+					renderTo:Ext.getBody(),
+					handler:function(){
+						//ajax请求
+						Ext.Ajax.request({
+							method:'POST',  //请求方式大写
+							url:'http://127.0.0.1:53261/api/Default/TestConnect3',  //请求地址TestConnect/TestConnect2
+							params :{//请求参数
+								cBarCode:'ABCD1234',
+								cWhCode:'40'
+							},//请求头部
+							headers:{
+								token:'token123'
+							},
+							timeout:6000,
+							failure: function(response, opts) {
+							        //console.log('请求失败:'+response.status);//状态码
+									//console.log(opts);//状态码
+									Ext.MessageBox.alert('系统提示','请求失败!');
+							},
+							success:function(response, opts){
+								console.log(response.status);//状态码
+								var text = response.responseText;
+								var obj = Ext.decode(text);   
+								console.log(obj.Msg); 
+							}
+						})
+					}
+				})
+				//---------------------------response对象有几个比较重要参数-------------
+				 // {
+					//  responseText:'',
+					//  responseXML:'',
+					//  status:0,
+					//  statusText:''
+				 // }
+				 
+			});
+			
+		</script>
+		
+	</body>
+</html>
