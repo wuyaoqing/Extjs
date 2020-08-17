@@ -13,6 +13,7 @@
     <link href="../css/icon.css" type="text/css" rel="stylesheet"/>
     <script>
         Ext.onReady(function(){
+			
 		//双击行编辑
 		var RowEditing = Ext.create('Ext.grid.plugin.RowEditing', { // 行编辑模式
                         clicksToMoveEditor : 2,   //双击编辑  整行修改
@@ -21,14 +22,50 @@
                         cancelBtnText:'取消',
                         errorsText:'错误',
                         dirtyText:'你要确认或取消更改'
-                       
             });
+			//列定义
+			var gridDolumns =  [  //列名
+			        { xtype: 'rownumberer',width:30,align:'center'},//行号列
+			        { header: 'ID',  dataIndex: 'Id',align:'center',hidden:true },
+			        { header: '创建日期',width:200,dataIndex: 'CreateTime',xtype:'datecolumn',format :'Y-m-d H:i:s',align:'center',editor:{
+						xtype:'datefield',allowBlank: false,format :'Y-m-d H:i:s'
+					} },
+			        { header: '用户姓名',width:200, dataIndex: 'UserName',align:'center',editor:{
+						  xtype: 'textfield',allowBlank: false
+					} },
+			        { header: '真实姓名',width:200, dataIndex: 'RealName',align:'center',editor:{xtype:'textfield',allowBlank: false} },
+					{ header: '雇佣日期',width:200, dataIndex: 'HireDate',xtype:'datecolumn',format: 'Y-m-d',align:'center',editor:{
+						 xtype: 'datefield',allowBlank: false
+					} },
+					{ header: '电话',width:200, dataIndex: 'Phone',align:'center' ,editor:{xtype:'textfield',allowBlank: false}},
+					{ header: '性别',width:200, dataIndex: 'Sex',align:'center',editor:{
+						xtype:'combobox',
+						allowBlank: false,
+						store : new Ext.data.ArrayStore({
+						    fields : ['value', 'text'],
+						    data : [['男', '男'], ['女', '女']]
+						}),
+						valueField : 'value',
+						displayField : 'text'
+					} },
+			        { header: '状态',width:200, dataIndex: 'State',align:'center',editor:{
+						xtype:'combobox',
+						store : new Ext.data.ArrayStore({
+							fields : ['value', 'text'],
+							data : [[true, '在职'], [false, '离职']]
+						}),
+						valueField : 'value',
+						displayField : 'text'
+						},
+						renderer:function(value){
+						 return value?'在职':'<font color="red">离职</font>'; 
+					}}];
 			//定义数据模型
 			Ext.define('Worker', {
 			    extend: 'Ext.data.Model',
 			    fields: [
 			       {name: 'Id'},
-			       {name: 'CreateTime'},
+			       {name: 'CreateTime',type: 'date'},
 			       {name: 'UserName'},
 			       {name: 'RealName'},
 			       {name: 'HireDate',type: 'date'},
@@ -52,36 +89,24 @@
                 },
                 autoLoad: true//自动加载数据
             });
-
+			
+			//复选框选择
+            var sm = new Ext.selection.CheckboxModel({checkOnly: true,mode:'SINGLE'});
             //用户管理面板
             var gridPanel  = Ext.create('Ext.grid.Panel', {
                 title: '工人管理',
-				selModel: { selType: 'checkboxmodel' },   //选择框  
-                forceFit:true,//列宽自适应
+				selModel: { selType: 'checkboxmodel',checkOnly :true,mode:'SINGLE'},   //选择框  或者=sm
+                forceFit:false,//列宽自适应
 				columnLines:true,//列框线
-                columns: [  //列名
-                    { xtype: 'rownumberer',width:30,align:'center'},//行号列
-                    { header: 'ID',  dataIndex: 'Id',align:'center' },
-                    { header: '创建日期', dataIndex: 'CreateTime',xtype:'datecolumn',format :'Y-m-d H:i:s',align:'center' },
-                    { header: '用户姓名', dataIndex: 'UserName',align:'center',editor:{
-						  xtype: 'textfield',allowBlank: false
-					} },
-                    { header: '真实姓名', dataIndex: 'RealName',align:'center' },
-					{ header: '雇佣日期', dataIndex: 'HireDate',xtype:'datecolumn',format: 'Y-m-d',align:'center',editor:{
-						 xtype: 'datefield'
-					} },
-					{ header: '电话', dataIndex: 'Phone',align:'center' },
-					{ header: '性别', dataIndex: 'Sex',align:'center' },
-                    { header: '状态', dataIndex: 'State',align:'center',renderer:function(value){
-						 return value?'在职':'<font color="red">离职</font>';//value等于true/false 重新渲染该列显示的内容
-					}}
-                ],
+                columns:gridDolumns,
                 bbar:[{ 
 					xtype: 'pagingtoolbar',
 					displayInfo:true,
 					store:myStore
 				}],//底部工具栏：显示分页条
-                height: 600,
+                //height: 600,
+				loadMask : true,
+				//layout: 'fit',//自适应
                 iconCls:'user',//标题图标
                 renderTo: Ext.getBody(),
                 store:myStore,//引用数据源
@@ -137,17 +162,59 @@
                     }
                 }},
                 {xtype: 'button', text: '刷新',iconCls:'reload',border:false ,handler:function () {
-                    myStore.reload();//重新加载store的数据
+                    myStore.load();//重新加载store的数据
                 }},
-				{xtype:'button',text:'保存修改',border:false,handler:function(){
-					
+				{xtype:'button',text:'保存新增',border:false,handler:function(){
+					//获取修改的数据
+					var modify = myStore.getModifiedRecords().slice(0);
+					var jsonArray = [];
+					Ext.each(modify,function(item){
+						jsonArray.push(item.data);
+					})
+					console.log(jsonArray);
+					//提交到保存
+					Ext.Ajax.request({
+						method:'POST',  //请求方式大写
+					    dataType:'json',
+					    headers: {'Content-Type':'application/json'},
+						url:'http://127.0.0.1:53261/api/Worker/AddWorkers', 
+						jsonData:jsonArray,
+						failure: function(response, opts) {
+								Ext.MessageBox.alert('系统提示','请求失败!');
+						},
+						success:function(response, opts){
+							var obj = Ext.util.JSON.decode(response.responseText);  
+							console.log(obj); 
+							if(obj.Flag==='OK'){
+								Ext.MessageBox.alert('系统提示','保存成功!');
+								myStore.reload();//重新加载store的数据
+							}
+						}
+					});
 				}},
 				{xtype:'button',text:'增加一行',border:false,handler:function(){
-					
+					 var newRow = Ext.create('Worker',{
+						 Id:0,
+						 CreateTime:'',
+						 UserName:'',
+						 RealName:'',
+						 HireDate:'',
+						 Phone:'',
+						 Sex:''
+					 })
+					 myStore.insert(myStore.getTotalCount(),newRow);//最界面最后插入一行
 				}}],
 				plugins: [RowEditing],
             });
-
+			//设置高度
+			gridPanel.setHeight(450);
+			//浏览器窗口大小改变
+			Ext.on('resize', function(width, height){
+				//console.log(document.body.clientHeight);
+				  myStore.reload();//重新加载store的数据
+				  
+			});
+			 
             //表单面板
            var formPanel = Ext.create('Ext.form.Panel', {
                 bodyPadding: 30,
