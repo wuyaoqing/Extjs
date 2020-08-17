@@ -21,11 +21,25 @@
                         saveBtnText:'确定',
                         cancelBtnText:'取消',
                         errorsText:'错误',
-                        dirtyText:'你要确认或取消更改'
+                        dirtyText:'你要确认或取消更改',
+					    listeners: {
+							beforeedit: {
+								fn: function(){ 
+									Ext.getCmp('btnAddSave').disable(true); 
+								   }},
+							canceledit:{
+								fn: function(){ 
+									
+								}}
+							}
             });
 			//列定义
+			/* 
+			 locked:true,   	//列冻结
+			 sortable : false   //禁止排序
+			 */
 			var gridDolumns =  [  //列名
-			        { xtype: 'rownumberer',width:30,align:'center'},//行号列
+			        { xtype: 'rownumberer',width:40,align:'center'},//行号列
 			        { header: 'ID',  dataIndex: 'Id',align:'center',hidden:true },
 			        { header: '创建日期',width:200,dataIndex: 'CreateTime',xtype:'datecolumn',format :'Y-m-d H:i:s',align:'center',editor:{
 						xtype:'datefield',allowBlank: false,format :'Y-m-d H:i:s'
@@ -35,10 +49,17 @@
 					} },
 			        { header: '真实姓名',width:200, dataIndex: 'RealName',align:'center',editor:{xtype:'textfield',allowBlank: false} },
 					{ header: '雇佣日期',width:200, dataIndex: 'HireDate',xtype:'datecolumn',format: 'Y-m-d',align:'center',editor:{
-						 xtype: 'datefield',allowBlank: false
-					} },
-					{ header: '电话',width:200, dataIndex: 'Phone',align:'center' ,editor:{xtype:'textfield',allowBlank: false}},
-					{ header: '性别',width:200, dataIndex: 'Sex',align:'center',editor:{
+						 xtype: 'datefield',allowBlank: false}
+					},
+					{text:'电话',columns:[{
+                            header: '手机',width:150, dataIndex: 'Phone',align:'center' ,
+							editor:{xtype:'numberfield',allowBlank: false,maxLength:11,
+							maxLengthText:'请输入正确的手机号码',minLength:11,minLengthText:'请输入正确的手机号码',
+						}},{
+								header: '手机2',width:150
+						}]
+					},
+					{ header: '性别',width:100, dataIndex: 'Sex',align:'center',editor:{
 						xtype:'combobox',
 						allowBlank: false,
 						store : new Ext.data.ArrayStore({
@@ -46,8 +67,8 @@
 						    data : [['男', '男'], ['女', '女']]
 						}),
 						valueField : 'value',
-						displayField : 'text'
-					} },
+						displayField : 'text'}
+					},
 			        { header: '状态',width:200, dataIndex: 'State',align:'center',editor:{
 						xtype:'combobox',
 						store : new Ext.data.ArrayStore({
@@ -58,7 +79,7 @@
 						displayField : 'text'
 						},
 						renderer:function(value){
-						 return value?'在职':'<font color="red">离职</font>'; 
+						 return value?'在职':'<span style="color: red; ">离职</span>';
 					}}];
 			//定义数据模型
 			Ext.define('Worker', {
@@ -110,15 +131,19 @@
                 iconCls:'user',//标题图标
                 renderTo: Ext.getBody(),
                 store:myStore,//引用数据源
-				//事件监听
-				// listeners: [{ 'itemclick': function (view, record, item, index, e) {
-				//                Ext.MessageBox.alert("标题",record.data.Id);
-				//             }}],
+				listeners: [
+					{ 'itemclick': function (view, record, item, index, e) {
+				              // Ext.MessageBox.alert("标题",record.data.Id);
+							  gridPanel.getSelectionModel().select(index);
+				    }}
+				],
                 tbar:[
 				{xtype: 'button', text: '新增',iconCls:'add',border:false , handler: function () {
+					formWindow.title = '新增员工';
                     formWindow.show();//打开表单窗口
                 }},
                 {xtype: 'button', text: '编辑',iconCls:'edit',border:false,handler: function () {
+					formWindow.title = '编辑员工';
                     var selected = gridPanel.getSelectionModel().getSelection();//获取选中的数据
                     if(selected.length==1){
                         formPanel.getForm().loadRecord(selected[0]);//把数据回显到表单中
@@ -130,6 +155,13 @@
                 {xtype: 'button', text: '删除',iconCls:'delete' ,border:false,handler:function () {
                     var selected = gridPanel.getSelectionModel().getSelection();//获取选中的数据
                     if(selected.length==1){
+						//删除新增的行
+						if(selected[0].data.Id==0){
+							//console.log(selected[0].data.id.split('-')[1]);//行索引
+							myStore.removeAt(parseInt(selected[0].data.id.split('-')[1])-1);
+							Ext.getCmp('btnAddOne').enable(true);//启用按钮
+							return;
+						}
                         Ext.Msg.show({//弹出确认框
                             title:'警告',
                             message: '是否确认删除该条记录?',
@@ -157,21 +189,23 @@
                                 }
                             }
                         });
-                    }else{
+                    
+					}else{
                         Ext.Msg.alert("温馨提示","请选择一条数据！");
                     }
                 }},
                 {xtype: 'button', text: '刷新',iconCls:'reload',border:false ,handler:function () {
                     myStore.load();//重新加载store的数据
                 }},
-				{xtype:'button',text:'保存新增',border:false,handler:function(){
+				{xtype:'button',text:'保存新增',id:'btnAddSave',border:false,handler:function(){
 					//获取修改的数据
 					var modify = myStore.getModifiedRecords().slice(0);
 					var jsonArray = [];
 					Ext.each(modify,function(item){
 						jsonArray.push(item.data);
-					})
-					console.log(jsonArray);
+					});
+					if(jsonArray.length<1){Ext.Msg.alert('系统提示','新增失败:无新增行');return;}
+					//console.log(jsonArray);
 					//提交到保存
 					Ext.Ajax.request({
 						method:'POST',  //请求方式大写
@@ -192,7 +226,7 @@
 						}
 					});
 				}},
-				{xtype:'button',text:'增加一行',border:false,handler:function(){
+				{xtype:'button',text:'增加一行',id:'btnAddOne',border:false,handler:function(){
 					 var newRow = Ext.create('Worker',{
 						 Id:0,
 						 CreateTime:'',
@@ -203,11 +237,44 @@
 						 Sex:''
 					 })
 					 myStore.insert(myStore.getTotalCount(),newRow);//最界面最后插入一行
+					 Ext.getCmp('btnAddOne').disable(false);
+				}},
+				{xtype:'button',text:'保存行修改',handler:function(){
+						//获取修改的数据
+						var modify = myStore.getModifiedRecords().slice(0);
+						var jsonArray = [];
+						Ext.each(modify,function(item){
+							jsonArray.push(item.data);
+						})
+						if(jsonArray.length<1){Ext.Msg.alert('系统提示','新增失败:无行修改记录');return;}
+						//console.log(jsonArray);
+					//提交到保存
+					Ext.Ajax.request({
+						method:'POST',  //请求方式大写
+					    dataType:'json',
+					    headers: {'Content-Type':'application/json'},
+						url:'http://127.0.0.1:53261/api/Worker/UpdateWorkers', 
+						jsonData:jsonArray,
+						failure: function(response, opts) {
+								Ext.MessageBox.alert('系统提示','请求失败!');
+						},
+						success:function(response, opts){
+							var obj = Ext.util.JSON.decode(response.responseText);  
+							console.log(obj); 
+							if(obj.Flag==='OK'){
+								Ext.MessageBox.alert('系统提示','保存成功!');
+								myStore.reload();//重新加载store的数据
+								Ext.getCmp('btnAddSave').enable(true); 
+							}else{
+								Ext.MessageBox.alert('系统提示',obj.Msg);
+							}
+						}
+					});
 				}}],
 				plugins: [RowEditing],
             });
 			//设置高度
-			gridPanel.setHeight(450);
+			gridPanel.setHeight(600);
 			//浏览器窗口大小改变
 			Ext.on('resize', function(width, height){
 				//console.log(document.body.clientHeight);
@@ -227,9 +294,10 @@
                 defaultType: 'textfield',//默认文本框
                 items: [{
                     name: 'Id',
+					xtype:'numberfield',
                     hidden:true
                 },{
-					name:'CreateTime',hidden:true
+					name:'CreateTime',hidden:true, xtype:'datefield', format: 'Y-m-d H:i:s'
 				},{
                     fieldLabel: '用户名',
                     name: 'UserName',
@@ -257,6 +325,7 @@
                     name: 'State',
                     fieldLabel: '状态',
                     xtype:'combobox',
+					allowBlank:false,
                     store : new Ext.data.ArrayStore({
                         fields : ['value', 'text'],
                         data : [[true, '在职'], [false, '离职']]
@@ -267,6 +336,7 @@
                     name: 'Sex',
                     fieldLabel: '性别',
                     xtype:'combobox',
+					allowBlank:false,
                     store : new Ext.data.ArrayStore({
                         fields : ['value', 'text'],
                         data : [['男', '男'], ['女', '女']]
@@ -294,25 +364,51 @@
                         if (form.isValid()) {
 							//form参数
 							var submitValues = form.getValues(); //console.log(submitValues);
-							Ext.Ajax.request({
-								method:'POST',  //请求方式大写
-							    dataType:'json',
-							    headers: {'Content-Type':'application/json'},
-								url:'http://127.0.0.1:53261/api/Worker/UpdateWorkers', 
-								jsonData:submitValues,
-								failure: function(response, opts) {
-										Ext.MessageBox.alert('系统提示','请求失败!');
-								},
-								success:function(response, opts){
-									var obj = Ext.util.JSON.decode(response.responseText);  
-									console.log(obj); 
-									if(obj.Flag==='OK'){
-										Ext.MessageBox.alert('系统提示','保存成功!');
-										formWindow.close();//关闭窗口
-										myStore.reload();//重新加载store的数据
+							var jsonArray = [];jsonArray.push(submitValues);
+							//当前是编辑员工
+							if(formWindow.title=='编辑员工'){
+								Ext.Ajax.request({
+									method:'POST',  //请求方式大写
+								    dataType:'json',
+								    headers: {'Content-Type':'application/json'},
+									url:'http://127.0.0.1:53261/api/Worker/UpdateWorkers', 
+									jsonData:jsonArray,
+									failure: function(response, opts) {
+											Ext.MessageBox.alert('系统提示','请求失败!');
+									},
+									success:function(response, opts){
+										var obj = Ext.util.JSON.decode(response.responseText);  
+										console.log(obj); 
+										if(obj.Flag==='OK'){
+											Ext.MessageBox.alert('系统提示','保存成功!');
+											formWindow.close();//关闭窗口
+											myStore.reload();//重新加载store的数据
+										}
 									}
-								}
-							});
+								});
+							}else{
+								//console.log(jsonArray);
+								//提交到保存
+								Ext.Ajax.request({
+									method:'POST',  //请求方式大写
+								    dataType:'json',
+								    headers: {'Content-Type':'application/json'},
+									url:'http://127.0.0.1:53261/api/Worker/AddWorkers', 
+									jsonData:jsonArray,
+									failure: function(response, opts) {
+											Ext.MessageBox.alert('系统提示','请求失败!');
+									},
+									success:function(response, opts){
+										var obj = Ext.util.JSON.decode(response.responseText);  
+										console.log(obj); 
+										if(obj.Flag==='OK'){
+											Ext.MessageBox.alert('系统提示','保存成功!');
+											formWindow.close();
+											myStore.reload();//重新加载store的数据
+										}
+									}
+								});
+							}
                         }
                     }
                 }]
