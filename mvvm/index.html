@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8">
+		
 		<title>ExtJs5.1测试</title>
+		<meta charset="utf-8">
 		<!-- 样式文件 -->
 		<link href="../ext/neptune/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
 		<!-- 核心文件 -->
@@ -11,10 +12,23 @@
 		<script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
 	</head>
 	<body>
+
 		<script type="text/javascript">
-			Ext.onReady(function() {
-			 
-			});
+			//设置加载目录
+			 Ext.Loader.setConfig({
+			            enabled: true,
+			            paths: {
+			                'app.view': 'app'
+			            }
+			        });
+			//标记ext单页面程序
+			 Ext.application({
+						name: 'app',
+						launch: function () {
+						},
+						autoCreateViewport: 'app.view.DemoView'
+					});	
 		</script>
+
 	</body>
 </html>

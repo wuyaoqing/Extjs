@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ExtJs5.1测试</title>
+		<!-- 样式文件 -->
+		<link href="../ext/neptune/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+		<!-- 核心文件 -->
+		<script src="../ext/ext-all-debug.js"></script>
+		<!-- 中文包 -->
+		<script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<input type="button" id="btn" value="点击" />
+
+		<script type="text/javascript">
+			Ext.onReady(function() {
+			Ext.QuickTips.init();
+				//ex001:点击一个按钮 ,打开一个新的窗体 window重复创建的问题
+				//第一种实现
+				//JQuery code: var btn = $('#btn'); var dombtn = btn.get(0);
+				var btn = Ext.get('btn'); //这个元素是经过Ext包装的一个Ext的Dom对象//alert(btn.dom.value);
+				btn.on('click', function() {
+					if (!Ext.getCmp('mywin')) { //Ext.ComponentManager.get方法的简写。 通过id查找现有的Component
+						Ext.create('Ext.window.Window', {
+							id: 'mywin', //如果你给组件加了一个id  那么这个组件就会被Ext所管理
+							title: '新窗体',
+							constrain:true, //限制窗口不能超出界面
+							icon: '../images/icons/edit_add.png',
+							height: 200,
+							width: 300,
+							bodyPadding:10,
+							collapsible: true, //折叠
+							fbar: [{
+									xtype: 'button',
+									text: '登陆'
+								},
+								{
+									xtype: 'button',
+									text: '重置'
+								}
+							],
+							items: [{
+								xtype: 'textfield',
+								fieldLabel: '登陆账号',
+								allowBlank:false
+							}, {
+								xtype: 'textfield',
+								fieldLabel: '登陆密码'
+							}],
+							renderTo: Ext.getBody() ,
+							modal:true  //加个modal遮罩其他元素避免按钮点击，但是外面有滚动条了
+						}).showAt();
+					}
+				});
+
+				//第二种实现不推荐Window组件一直存在
+				// var win = Ext.create('Ext.window.Window', {
+				// 	title: '新窗体',
+				// 	height: 300,
+				// 	width: 400,
+				// 	renderTo: Ext.getBody(),
+				// 	closeAction: 'hide' ,//closeAction默认是destroy 
+				// 	//remove：将这个window从DOM中移除 destroy 销毁并且级联其自身内的 子组件。
+				// 	//close：这个window将不能再通过方法show渲染到页面
+				//  hide:隐藏窗口
+				// });
+
+				// Ext.get('btn').on('click', function() {
+				// 	win.show();
+				// });
+
+
+
+			})
+		</script>
+	</body>
+</html>

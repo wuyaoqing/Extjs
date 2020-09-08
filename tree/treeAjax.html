@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ExtJs5.1测试</title>
+	<!-- 样式文件 -->
+	<link href="../ext/neptune/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+	<!-- 核心文件 -->
+	<script src="../ext/ext-all-debug.js"></script>
+	<!-- 中文包 -->
+	<script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
+		
+	</head>
+	<body>
+		
+		
+		<script type="text/javascript">
+			Ext.onReady(function(){
+				//tree data
+				var store = Ext.create('Ext.data.TreeStore', {
+					proxy:{
+						type:'ajax',
+						url:'treeData.json'
+					}
+				});
+				//tree
+				var tree = Ext.create('Ext.tree.Panel', {
+				    title: '树控件ajax',
+				    width: 200,
+				    height: 250,//不设定高度将自动设置高度
+				    store: store,
+				    rootVisible: false //隐藏root根节点
+				});
+				
+				tree.render(Ext.getBody());
+				tree.getRootNode().expand(true);
+				tree.on('checkchange',function(node,checked,opts){
+					  console.log(node);
+				})
+			})
+		</script>
+	</body>
+</html>

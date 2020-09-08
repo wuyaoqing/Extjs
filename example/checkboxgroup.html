@@ -1,0 +1,60 @@
+<html>
+    <head>
+      <meta charset="UTF-8">
+       <title>worker</title>
+      <!-- 样式文件 -->
+      <link href="../ext/neptune/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+      <!-- 核心文件 -->
+      <script src="../ext/ext-all-debug.js"></script>
+      <!-- 中文包 -->
+      <script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
+        <style type="text/css">
+.x-check-group-alt {
+    background: #D1DDEF;
+    border-top:1px dotted #B5B8C8;
+    border-bottom:1px dotted #B5B8C8;
+}
+        </style>
+        <script type="text/javascript">
+Ext.onReady(function(){
+
+ function btnAdd(){
+		 var checkbox = new Ext.form.Checkbox({
+			 boxLabel:'Item 6',
+			 name:'cb-horiz-6'
+		 });
+		 Ext.getCmp('cbg').items.add(checkbox);
+		 Ext.getCmp('cbg').doLayout();//重新加载页面才有效果
+	}
+	
+    var form = new Ext.form.FormPanel({
+        title: 'checkbox group',
+        frame: true,
+        width: 600,
+        items: [ {
+                xtype: 'checkboxgroup',
+                fieldLabel: '多列（水平）',
+                columns: 3,
+				id:'cbg',
+				name:'checkboxgroup',
+                items: [
+                    {boxLabel: 'Item 1', name: 'cb-horiz-1'},
+                    {boxLabel: 'Item 2', name: 'cb-horiz-2', checked: true},
+                    {boxLabel: 'Item 3', name: 'cb-horiz-3'},
+                    {boxLabel: 'Item 4', name: 'cb-horiz-4'},
+                    {boxLabel: 'Item 5', name: 'cb-horiz-5'}
+                ]
+        }],
+		tbar:[
+			{xtype:'button',text:'增加复选框',handler:btnAdd}
+		]
+    });
+
+    form.render(document.body);
+   
+});
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

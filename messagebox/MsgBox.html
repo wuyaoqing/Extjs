@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+		<title>ExtJs5.1测试</title>
+		<meta charset="utf-8">
+		<!-- 样式文件 -->
+		<link href="../ext/neptune/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+		<!-- 核心文件 -->
+		<script src="../ext/ext-all-debug.js"></script>
+		<!-- 中文包 -->
+		<script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
+	</head>
+	<body>
+
+		<script type="text/javascript">
+			// 初始化组件
+			Ext.onReady(function() {
+				//Ext.MessageBox.wait(' 正在执行', '请稍等...');
+				console.log( document.documentElement.clientHeight );
+				console.log( document.documentElement.clientWidth );
+				//初始化完成后弹出提示框  单例，Ext.MessageBox 别名 ‘Ext.Msg’也能够使用。
+				// Ext.MessageBox.alert('标题', 'Hello World!',function(btn){
+				// 	console.log('刚刚点击:'+btn); //ok/cancel
+				// });
+				
+				//弹出输入
+				// Ext.Msg.prompt('提示', '请输入姓名:', function(btn, text){
+				//     if (btn == 'ok'){
+				//        console.log(text);
+				//     }else{
+				// 		console.log('cancel');
+				// 	}
+				// });
+
+				//更加丰富的show方法
+				// Ext.Msg.show({
+				//     title:'保存修改?',
+				//     message: ' 是否保存修改?',
+				//     buttons: Ext.Msg.YESNOCANCEL,
+				//     icon: Ext.Msg.QUESTION,
+				//     fn: function(btn) {
+				//         if (btn === 'yes') {
+				//             console.log('Yes pressed');
+				//         } else if (btn === 'no') {
+				//             console.log('No pressed');
+				//         } else {
+				//             console.log('Cancel pressed');
+				//         }
+				//     }
+				// });
+				
+				//show方法
+				// Ext.Msg.show({
+				// 	title: '我是自定义的提示框!!',
+				// 	msg: '我是内容!!',
+				// 	width: 300,
+				// 	height: 150,
+				// 	buttons: Ext.Msg.OKCANCEL,
+				// 	icon: Ext.Msg.QUESTION // ERROR INFO QUESTION  WARNING
+				// });
+
+
+				//询问框
+				//	Ext.Msg.confirm('提示信息','确认删除该条记录么?',function(op){
+				//			// yes  on
+				//			if(op == 'yes'){
+				//				alert('确认了!');
+				//			} else {
+				//				alert('取消了!');
+				//			}
+				//	});
+
+
+				//多行输入框
+				//String title, String msg, [Function fn], [Object scope], [Boolean/Number multiline], [String value]
+					// Ext.Msg.prompt('我是标题!','请输入姓名:' , function(op , val){
+					// 	//op  ok cancel
+					// 	console.info(op);
+					// 	console.info(val);
+					// } , this , true , '张三');
+
+				//等待框 
+				// Ext.Msg.wait('提示信息','我是内容' ,{
+				// 	   interval: 400, 			//循环定时的间隔
+				// 	   duration: 2000,			//总时长
+				// 	   increment: 5,			//执行进度条的次数
+				// 	   text: '更新中,请稍后...',	//进度条上的文字
+				// 	   scope: this,
+				// 	   fn: function(){
+				// 			alert('更新成功!');
+				// 	   },
+				// 	   animate:true				//更新渲染时提供一个动画效果
+				// });
+
+				//进度条
+				// var progressBox =Ext.MessageBox.progress('请等待','正在拼命加载数据...')
+				// progressBox.updateProgress(0.5,'加载50%')
+
+
+			});
+		</script>
+
+	</body>
+</html>

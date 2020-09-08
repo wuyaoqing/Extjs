@@ -11,10 +11,25 @@
 		<script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
 	</head>
 	<body>
+		
 		<script type="text/javascript">
-			Ext.onReady(function() {
-			 
+			
+			//类定义需要放在onReady之外
+			Ext.define('demo.Demo',{
+				name:'qing',
+				say:function(){
+					return "hi:"+this.name;
+				}
+			})
+			
+			
+			Ext.onReady(function(){
+				//使用
+				var demo = new demo.Demo();
+				console.log(demo.say());
+				
 			});
+			
 		</script>
 	</body>
 </html>

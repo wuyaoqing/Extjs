@@ -116,7 +116,7 @@
             //用户管理面板
             var gridPanel  = Ext.create('Ext.grid.Panel', {
                 title: '工人管理',
-				selModel: { selType: 'checkboxmodel',checkOnly :true,mode:'SINGLE'},   //选择框  或者=sm
+				selModel: { selType: 'checkboxmodel',checkOnly :false,mode:'MULTI'},   //选择框  或者=sm
                 forceFit:false,//列宽自适应
 				columnLines:true,//列框线
                 columns:gridDolumns,

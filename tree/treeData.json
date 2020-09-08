@@ -1,0 +1,18 @@
+{
+	"children": [
+		{ "text": "动物2","checked":false, "children":[
+			{"text":"哺育动物","checked":false,"children":[
+				{"text":"人","checked":false,"leaf":true},
+				{"text":"蝙蝠","checked":false,"leaf":true}
+			]}
+			]
+		},
+		{ "text": "水果", "checked": false, "id":"shuiguo",
+		   "children": [
+			{ "text": "苹果", "checked": false, "leaf": true },
+			{ "text": "雪梨", "checked": false, "leaf": true}
+			] 
+		},
+		{ "text": "汽车", "checked": false, "leaf": true }
+	]
+}
