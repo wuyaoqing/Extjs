@@ -5,7 +5,7 @@
 		<title>ExtJs5.1测试</title>
 		<meta charset="utf-8">
 		<!-- 样式文件 -->
-		<link href="../ext/neptune/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+		<link href="../ext/neptune/resources/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
 		<!-- 核心文件 -->
 		<script src="../ext/ext-all-debug.js"></script>
 		<!-- 中文包 -->
@@ -26,7 +26,8 @@
 						name: 'app',
 						launch: function () {
 						},
-						autoCreateViewport: 'app.view.DemoView'
+						//autoCreateViewport:true  //会从app/view/Viewport.js  启动
+						autoCreateViewport: 'app.view.DemoView'//指定页面文件启动
 					});	
 		</script>
 

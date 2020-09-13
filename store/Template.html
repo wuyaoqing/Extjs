@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ExtJs5.1测试</title>
+		<!-- 样式文件 -->
+		<link href="../ext/neptune/resources/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+		<!-- 核心文件 -->
+		<script src="../ext/ext-all-debug.js"></script>
+		<!-- 核心文件 -->
+		<script src="../ext/neptune/ext-theme-neptune-debug.js"></script>
+		<!-- 中文包 -->
+		<script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			Ext.onReady(function() {
+			 
+			  Ext.define('User',{
+				 extend:'Ext.data.Model',
+				 fields:[
+						 {name:'name',type:'string'},
+						 {name:'sex',type:'int'}
+				   ]
+			 });
+			  
+			 var data=[
+				 ['boy',0],
+				 ['girl',1]
+			 ]
+			 
+			 var store = new Ext.data.ArrayStore({
+				 data:data,
+				 fields:[
+					 {name:'name',type:'string'},
+					 {name:'sex',type:'int'}
+				 ]
+			 });
+			 //增加
+			  var newUser = new User({
+				  name:'test',sex:5
+			  })
+			  store.add(newUser);
+			 //遍历store
+			 for(var i=0;i<store.getCount();i++){
+				 var rowRecord = store.getAt(i); //行数据 Ext.data.Model对象
+				 console.log(rowRecord.get('name'));
+			 }
+			 
+			});
+		</script>
+	</body>
+</html>

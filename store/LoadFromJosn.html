@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ExtJs5.1测试</title>
+		<!-- 样式文件 -->
+		<link href="../ext/neptune/resources/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+		<!-- 核心文件 -->
+		<script src="../ext/ext-all-debug.js"></script>
+		<!-- 核心文件 -->
+		<script src="../ext/neptune/ext-theme-neptune-debug.js"></script>
+		<!-- 中文包 -->
+		<script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			Ext.onReady(function() {
+			 // 建立一个store要使用的 model
+			 Ext.define('User', {
+			     extend: 'Ext.data.Model',
+			     fields: [
+			         {name: 'Id', type: 'int'},
+			         {name: 'UserName',  type: 'string'},
+			         {name: 'RealName',       type: 'string'},
+			         {name: 'HireDate',  type: 'date'}
+			     ]
+			 });
+			
+			 var myStore = Ext.create('Ext.data.Store', {
+			     model: 'User',
+			     proxy: {
+			         type: 'ajax',
+			         url: 'http://127.0.0.1:53261/api/Worker/GetWorkers',
+			         reader: {
+			             type: 'json',
+			             rootProperty: 'result',
+						 totalProperty: 'total'  
+			         }
+			     },
+				 autoLoad:true
+			 });
+			// myStore.load();
+			 
+			 //数量
+			// console.log(myStore);
+			 myStore.each(function(record){
+				 console.log(record.get('Id'));
+			 })
+			});
+		</script>
+	</body>
+</html>

@@ -5,7 +5,7 @@ Ext.define('mvc.controller.Demo', {
         ref: 'demo', //生成get方法的方法名
         selector: 'demo' //组件的xtype
     }],
-	
+	models: ['Demo'],
 	//与model绑定
     stores: ['Demo'],
 	//将界面控件与方法绑定

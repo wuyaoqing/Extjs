@@ -2,6 +2,9 @@ Ext.define("MyApp.view.UserList", {
     extend: "Ext.grid.Panel",
     alias: 'widget.userlist',
     store: "UserStore",
+	tbar:[
+		{xtype:'button',text:'按钮',action:'testclick'},
+	],
     initComponent: function () {
         this.columns = [
             { text: '姓名', dataIndex: 'name' },

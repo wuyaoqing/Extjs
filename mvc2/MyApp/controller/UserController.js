@@ -1,6 +1,6 @@
 Ext.define('MyApp.controller.UserController', {
     extend: 'Ext.app.Controller',
-	alias:'usercontroller',
+	alias:'controller.usercontroller',
     stores: ['UserStore'],
     models: ['UserModel','User2'],
     views: ['UserList', 'UserEdit'],
@@ -9,6 +9,9 @@ Ext.define('MyApp.controller.UserController', {
             'userlist': {
                 itemdblclick: this.editUser
             },
+			'userlist [action=testclick]': {
+			    click: this.testclick
+			},
             'useredit button[action=save]': {
                 click: this.saveUser
             }

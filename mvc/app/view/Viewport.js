@@ -1,18 +1,16 @@
 Ext.define('mvc.view.Viewport', {
     extend: 'Ext.container.Viewport',
-    layout: 'vbox',
+    layout: 'fit',
 
     requires: [
         'mvc.view.Demo',
-		'mvc.view.Demo2'
     ],
 
     initComponent: function() {
         this.items = [
-			{xtype: 'demo'},
-			{xtype: 'demo2'},
-			];
+			{xtype: 'demo'}
+	   ];
 
-        this.callParent();
+    this.callParent();
     }
 });
