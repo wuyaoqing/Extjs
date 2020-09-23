@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<title>ExtJs5.1测试</title>
 	<!-- 样式文件 -->
-	<link href="../ext/neptune/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+	<link href="../ext/neptune/resources/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
 	<!-- 核心文件 -->
 	<script src="../ext/ext-all-debug.js"></script>
 	<!-- 中文包 -->
@@ -33,12 +33,13 @@
 				                { text: "雪梨", checked: false, leaf: true}
 								] 
 							},
-				            { text: "汽车", checked: false, leaf: true }
+				            { text: "汽车", checked: false,children:[
+								{ text: "丰田", checked: false, leaf: true}
+							]}
 				        ]
 				    }
 				});
 				//tree
-				
 				var tree = Ext.create('Ext.tree.Panel', {
 				    title: '树控件',
 				    width: 200,
@@ -51,7 +52,8 @@
 				tree.getRootNode().expand(false);
 				tree.on('itemclick',function(node){
 					console.log(node);
-				})
+				});
+				
 			})
 		</script>
 	</body>
