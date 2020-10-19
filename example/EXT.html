@@ -15,8 +15,60 @@
 	<body>
 		<script type="text/javascript">
 			Ext.onReady(function() {
+				//Ext.isNumeric(value) value示例: 1, '1', '2.34'都是返回true
 				var num = "1.2233";
 				console.log(Ext.isNumeric(num));
+				
+				//改方法比较严格Ext.isNumber(value) value示例: 1, 2.34 都是返回true
+				console.log(Ext.isNumber(num));
+				
+				//四舍五入保留n位小数
+				var value = Ext.util.Format.round(3.141526,3);
+				console.log(value);
+				console.log(Ext.typeOf(value));//number
+				
+				//isEmpty
+				let empty1 = "";
+				console.log(Ext.isEmpty(empty1));//true
+				let empty2 = " ";
+				console.log(Ext.isEmpty(empty2,true));//false
+				
+				//对象克隆
+				let student =[ {name:'qing'}];
+				var stu = Ext.clone(student);
+				console.log(stu);
+				console.log(stu===student);
+				
+				var stu2 = student;//false
+				console.log(stu2===student);//true
+				
+				//生成id
+				console.log(Ext.id());
+				
+				//显示当前的运行环境
+				console.log(Ext.is);
+				console.log(Ext.isWindows);
+				
+				//EACH
+				var array = [1,2];
+				Ext.each(array,(value,index)=>{
+					console.log('Ext.each:'+value);
+				})
+				
+				//fromQueryString
+				var query = Ext.Object.fromQueryString("foo=1&bar=2"); // 返回 {foo: 1, bar: 2}
+				console.log(query);
+				
+				//randomInt
+				console.log(Ext.Number.randomInt(0,2));
+				
+				//去除重复
+				var array =[1,2,2,3,4,3]
+				console.log(Ext.Array.unique(array));//[1, 2, 3, 4]
+				
+				//抛出错误
+				//Ext.Error.raise('Something bad happened!');
+				
 			});
 		</script>
 	</body>

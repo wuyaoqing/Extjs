@@ -27,14 +27,18 @@
 						//ajax请求
 						Ext.Ajax.request({
 							method:'GET',  //请求方式大写
+							async:true,//是否异步请求
 							url:'http://127.0.0.1:53261/api/Default/TestConnect2',  //请求地址TestConnect/TestConnect2
 							params :{
 								age:18,
 								name:'qing'
 							},
+							disableCaching :true,
 							timeout:6000,
 							failure: function(response, opts) {
-							        console.log(response.status);//状态码
+							        console.log('失败:'+Ext.encode(response));
+									console.log('失败:'+Ext.encode(opts));
+									Ext.MessageBox.alert('系统提示','请求失败!');
 							},
 							success:function(response, opts){
 								var text = response.responseText;
@@ -44,7 +48,9 @@
 								//console.log(text);//{"Flag":"OK","Msg":"TestConnect连接成功:2020-08-05 15:57:10","Data":null}
 								console.log(obj.Msg); 
 							}
-						})
+						});
+						//异步操作，会先执行此代码
+						console.log('123456');
 					}
 				});
 				//创建post请求按钮

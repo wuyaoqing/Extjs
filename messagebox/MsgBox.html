@@ -5,7 +5,7 @@
 		<title>ExtJs5.1测试</title>
 		<meta charset="utf-8">
 		<!-- 样式文件 -->
-		<link href="../ext/neptune/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+		<link href="../ext/neptune/resources/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
 		<!-- 核心文件 -->
 		<script src="../ext/ext-all-debug.js"></script>
 		<!-- 中文包 -->
@@ -52,24 +52,24 @@
 				
 				//show方法
 				// Ext.Msg.show({
-				// 	title: '我是自定义的提示框!!',
-				// 	msg: '我是内容!!',
+				// 	title: '标题',
+				// 	msg: '内容',
 				// 	width: 300,
 				// 	height: 150,
-				// 	buttons: Ext.Msg.OKCANCEL,
+				// 	buttons: Ext.Msg.YESNO,
 				// 	icon: Ext.Msg.QUESTION // ERROR INFO QUESTION  WARNING
 				// });
 
 
 				//询问框
-				//	Ext.Msg.confirm('提示信息','确认删除该条记录么?',function(op){
-				//			// yes  on
-				//			if(op == 'yes'){
-				//				alert('确认了!');
-				//			} else {
-				//				alert('取消了!');
-				//			}
-				//	});
+					// Ext.Msg.confirm('提示信息','确认删除该条记录么?',function(op){
+					// 		// yes  on
+					// 		if(op == 'yes'){
+					// 			alert('确认了!');
+					// 		} else {
+					// 			alert('取消了!');
+					// 		}
+					// });
 
 
 				//多行输入框
@@ -94,9 +94,12 @@
 				// });
 
 				//进度条
-				// var progressBox =Ext.MessageBox.progress('请等待','正在拼命加载数据...')
-				// progressBox.updateProgress(0.5,'加载50%')
-
+				var progressBox =Ext.MessageBox.progress('请等待','正在拼命加载数据...')
+				progressBox.updateProgress(0.5,'加载50%')
+				var task = new Ext.util.DelayedTask(function(){
+					 progressBox.updateProgress(0.7,'加载70%')
+				 })
+				 task.delay(3000)
 
 			});
 		</script>

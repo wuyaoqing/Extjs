@@ -36,7 +36,7 @@
                     url: '../json/user_list.json',
                     reader: {
                         type: 'json',//返回类型
-                        root: 'result',//从返回的结果中指定result属性作为数据集合
+                        rootProperty: 'result',//从返回的结果中指定result属性作为数据集合
 						totalProperty:'total' //页大小
                     }
                 },
@@ -49,6 +49,7 @@
                 forceFit:false,//列宽自适应
 				columnLines:true,//列框线
 				loadMask:true,
+				border:true,
                 columns: [  //列名
                     { xtype: 'rownumberer',width:30,align:'center'},//行号列
                     { header: '用户名',  dataIndex: 'username',align:'center' ,width:100},
