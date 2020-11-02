@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ExtJs5.1测试</title>
+		<!-- 样式文件 -->
+		<link href="../ext/neptune/resources/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+		<!-- 核心文件 -->
+		<script src="../ext/ext-all-debug.js"></script>
+		<!-- 核心文件 -->
+		<script src="../ext/neptune/ext-theme-neptune-debug.js"></script>
+		<!-- 中文包 -->
+		<script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
+		
+		<style>
+			.liclass {
+				color: #0079D2;
+			}
+			.li2class {
+				color: #ff0000;
+			}
+		</style>
+	</head>
+	<body>
+		<button id="btnaddCls" onclick="addCls()">增加样式</button>
+		<button onclick="removeCls()" id="btnremoveCls">移除样式</button>
+		<ul>
+			<li>1</li>
+			<li>2</li>
+			<li id="id3">3</li>
+		</ul>
+		
+		<script type="text/javascript">
+			Ext.onReady(function() {
+				// var allli = Ext.select('li');
+				// allli.first().addCls('liclass');
+				 
+				// var li3 = Ext.get('id3');
+				// li3.addCls('liclass')
+				//li3.appendChild(Ext.dom.Helper.createDom('<li>4</li>'))
+				
+				// console.log(li3.dom);
+				
+			});
+			
+			function addCls(){
+				var li = Ext.select("li");
+				li.each(function(el){
+					el.addCls('li2class');
+				})
+			}
+			
+			function removeCls(){
+				var li = Ext.select("li");
+				li.each(function(el){
+					el.removeCls('li2class');
+				})
+			}
+		</script>
+	</body>
+</html>
