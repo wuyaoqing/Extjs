@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ExtJs5.1测试</title>
+		<!-- 样式文件 -->
+		<link href="../ext/neptune/resources/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+		<!-- 核心文件 -->
+		<script src="../ext/ext-all-debug.js"></script>
+		<!-- 核心文件 -->
+		<script src="../ext/neptune/ext-theme-neptune-debug.js"></script>
+		<!-- 中文包 -->
+		<script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
+	</head>
+	<body>
+	<div id="clock">时间</div>
+	<button id="btnStopTask">停止</button>	
+	<button id="btnStopStart">启动</button>	
+	<input type="text" id="txt" value="" />
+		
+		
+		<script type="text/javascript">
+			Ext.onReady(function() {
+				//----------Ext.util.Cookies---------------
+				Ext.util.Cookies.set("key", "value");
+				console.log("Cookies:" + Ext.util.Cookies.get("key"))
+
+				//----------Ext.util.Format---------------				
+				//四舍五入保留n位小数，与toFixed方法类似，但是返回的是number类型
+				var value = Ext.util.Format.round(3.141526, 3);
+				console.log(value);
+				console.log(Ext.typeOf(value)); //number
+
+				//----------Ext.util.Format.date---------------	
+				console.log(Ext.util.Format.date(new Date(), 'Y-m-d'));
+				console.log(Ext.util.Format.date(new Date(), 'Y-m-d H:i:s'));
+
+				//----------Ext.util.Format.format------------
+				//----------Ext.String.Format---------------	
+				var cls = 'my-class',
+					text = 'Some text';
+				var s = Ext.String.format('<div class="{0}">{1}</div>', cls, text);
+				// s 现在是字符串: '<div class="my-class">Some text</div>'
+
+				//----------Ext.util.Format.number---------------	
+				// (123456.789):
+				// 0 - (123456) 只显示整数，没有小数
+				// 0.00 - (123456.78) 精确到两位小数
+				// 0.0000 - (123456.7890) 精确到四位小数
+				// 0,000 - (123,456) 显示逗号和整数，没有小数
+				// 0,000.00 - (123,456.78) 显示逗号和两位小数
+				// 0,0.00 - (123,456.78) 快捷方法，显示逗号和两位小数
+				// 在一些国际化的场合需要反转分组（,）和小数位（.），那么就在后面加上/i. 例如: 0.000,00/i 
+				console.log(Ext.util.Format.number(123456.789, '0,000')); //123,457
+
+				//----------Ext.util.Format.round---------------	
+				console.log(Ext.util.Format.round(123456.789, 2)); //123456.79
+
+				//将一个数值格式化成货币形式
+				console.log(Ext.util.Format.currency(123456.79)); //¥123,456.79
+
+				//转义 (&, <, >, ', 和 ") 为能在HTML中显示的字符。
+				//&lt;div class=&quot;my-class&quot;&gt;Some text&lt;/div&gt;
+				console.log(Ext.util.Format.htmlEncode('<div class="my-class">Some text</div>'));
+
+				//将 (&, <, >, ', 和 ") 字符从HTML显示的格式还原。
+				//<div class="my-class">Some text</div>
+				console.log(Ext.util.Format.htmlDecode('&lt;div class=&quot;my-class&quot;&gt;Some text&lt;/div&gt;'));
+
+				//在字符串左边填充指定字符:00123
+				console.log(Ext.util.Format.leftPad("123", 5, "0"));
+
+				//----Ext.String.trim()跟下面的一样
+				var s = "   foo  bar   ";
+				console.log('-' + s + '-'); //-   foo  bar   -
+				console.log('-' + s.trim() + '-'); //-foo  bar-
+
+				//随机数
+				console.log(Ext.Number.randomInt(0, 100));
+
+
+//----------------------------------Ext.util.TaskRunner-----------------------------
+//提供以异步方式执行一个或多个任意任务的功能
+ // 启动一个简单的时钟任务，每秒执行一次更新一个div
+ var updateClock = function () {
+     Ext.fly('clock').update(Ext.Date.format(new Date(), 'Y-m-d H:i:s'));
+ }
+ 
+
+// var task = Ext.TaskManager.start({
+//      run: updateClock,
+//      interval: 1000
+//  });
+ 
+//或者这样写
+var runner = new Ext.util.TaskRunner();
+ var task = runner.newTask({
+     run: updateClock,
+     interval: 1000
+ })
+
+//task.start(); task.destroy();  task.stop();
+Ext.get('btnStopTask').on('click',function(){
+	task.stop();
+}) 
+Ext.get('btnStopStart').on('click',function(){
+	task.start();
+})
+
+//----------------------------------Ext.JSON-----------------------------
+ var obj ={name:'qing',age:18};
+ console.log(Ext.JSON.encode(obj));//{"name":"qing","age":18}
+ 
+ console.log(Ext.JSON.decode('{"name":"qing","age":18}'));//{ name: "qing", age: 18 }
+ console.log(Ext.JSON.encodeDate(new Date()));// "yyyy-mm-ddThh:mm:ss"。
+ 
+ //键值对集合顺序固定
+ //------------------Ext.util.MixedCollection-----------------------------
+ var coll = new Ext.util.MixedCollection();
+ coll.add('key1', 'val1');
+ coll.add('key2', 'val2');
+ coll.add('key3', 'val3');
+ 
+ console.log(coll.get('key1')); // prints 'val1'
+ console.log(coll.indexOfKey('key3')); // prints 2
+ 
+ //筛选
+ var people = new Ext.util.MixedCollection();
+ people.addAll([
+     {id: 1, age: 25, name: 'Ed'},
+     {id: 2, age: 24, name: 'Tommy'},
+     {id: 3, age: 24, name: 'Arne'},
+     {id: 4, age: 26, name: 'Aaron'}
+ ]);
+ 
+ //a new MixedCollection containing only the items where age == 24
+ var middleAged = people.filter('age', 24);
+ console.log(middleAged.items);
+ 
+  var middleAged2 = people.filterBy(function(obj,key){
+	  return obj.age===25;
+  }) 
+  console.log(middleAged2.items);
+  
+ 
+ //无序集合Ext.util.HashMap
+ var map = new Ext.util.HashMap();
+ map.add('key1', 1);
+ map.add('key2', 2);
+ map.add('key3', 3);
+ 
+ map.each(function(key, value, length){
+     console.log(key, value, length);
+ });
+ 
+ //-------------------键盘事件
+ new Ext.util.KeyNav('txt',{
+	left : function(e){
+		  console.log("点击了left");
+	  },
+	  right : function(e){
+		  console.log("点击了right");
+	  }
+ })
+ 
+			});
+		</script>
+	</body>
+</html>
