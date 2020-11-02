@@ -21,31 +21,63 @@
 			     fields: [
 			         {name: 'Id', type: 'int'},
 			         {name: 'UserName',  type: 'string'},
-			         {name: 'RealName',       type: 'string'},
+			         {name: 'RealName',  type: 'string'},
 			         {name: 'HireDate',  type: 'date'}
 			     ]
 			 });
 			
-			 var myStore = Ext.create('Ext.data.Store', {
-			     model: 'User',
-			     proxy: {
-			         type: 'ajax',
-			         url: 'http://127.0.0.1:53261/api/Worker/GetWorkers',
-			         reader: {
-			             type: 'json',
-			             rootProperty: 'result',
-						 totalProperty: 'total'  
-			         }
-			     },
-				 autoLoad:true
-			 });
-			// myStore.load();
+			 // var myStore = Ext.create('Ext.data.Store', {
+			 //     model: 'User',
+			 //     proxy: {
+			 //         type: 'ajax',
+			 //         url: 'http://127.0.0.1:53261/api/Worker/GetWorkers',
+			 //         reader: {
+			 //             type: 'json',
+			 //             rootProperty: 'result',
+				// 		 totalProperty: 'total'  
+			 //         }
+			 //     },
+				//  autoLoad:true
+			 // });
 			 
-			 //数量
-			// console.log(myStore);
-			 myStore.each(function(record){
-				 console.log(record.get('Id'));
-			 })
+			 Ext.define('zsmy.User', {
+			     extend: 'Ext.data.Store',
+			     requires: [
+			         'Ext.data.proxy.Ajax',
+			         'Ext.data.reader.Json'
+			     ],
+			     constructor: function (cfg) {
+			         var me = this;
+			         cfg = cfg || {};
+			         me.callParent([Ext.apply({
+			             model: 'User',
+			             autoLoad: cfg.autoLoad,
+			             proxy: {
+			                 type: 'ajax',
+			                 url: cfg.url,
+							 extraParams:cfg.params,
+			                 reader: {
+			                     type: 'json',
+			                     rootProperty: 'result',
+								 totalProperty: 'total'  
+			                 }
+			             }
+			         }, cfg)]);
+			     }
+			 });
+			 
+			Ext.create('Ext.form.ComboBox', {
+			    fieldLabel: '选择',
+			    store: new Ext.create('zsmy.User', {
+									url: 'http://127.0.0.1:53261/api/Worker/GetWorkers',
+									params: {start:1},
+									autoLoad: true
+								}),
+			    queryMode: 'remote',
+			    displayField: 'UserName',
+			    valueField: 'RealName',
+			    renderTo: Ext.getBody()
+			});
 			});
 		</script>
 	</body>

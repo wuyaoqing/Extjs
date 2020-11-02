@@ -59,21 +59,20 @@
 					margin:10,
 					renderTo:Ext.getBody(),
 					handler:function(){
+						
 						//ajax请求
 						Ext.Ajax.request({
 							method:'POST',  //请求方式大写
 							url:'http://127.0.0.1:53261/api/Default/TestConnect3',  //请求地址TestConnect/TestConnect2
-							params :{//请求参数
+							jsonData :{//请求参数
 								cBarCode:'ABCD1234',
 								cWhCode:'40'
 							},//请求头部
 							headers:{
 								token:'token123'
 							},
-							timeout:6000,
+							//timeout:6000,
 							failure: function(response, opts) {
-							        //console.log('请求失败:'+response.status);//状态码
-									//console.log(opts);//状态码
 									Ext.MessageBox.alert('系统提示','请求失败!');
 							},
 							success:function(response, opts){
