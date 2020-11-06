@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ExtJs5.1测试</title>
+		<!-- 样式文件 -->
+		<link href="../ext/neptune/resources/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+		<!-- 核心文件 -->
+		<script src="../ext/ext-all-debug.js"></script>
+		<!-- 核心文件 -->
+		<script src="../ext/neptune/ext-theme-neptune-debug.js"></script>
+		<!-- 中文包 -->
+		<script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="grid"></div>
+		<script type="text/javascript">
+			Ext.onReady(function() {
+
+				var comboData = [
+					[0, '新版ext教程'],
+					[1, 'ext在线支持'],
+					[2, 'ext扩展']
+				];
+
+				var columns = [{
+						header: '行ID',
+						dataIndex: 'ID',
+					}, {
+						header: '数字列',
+						dataIndex: 'number',
+						editor: new Ext.form.NumberField({
+							allowBlank: false,
+							allowNegative: false,
+							maxValue: 10
+						})
+					}, {
+						header: '选择列',
+						dataIndex: 'combo',
+						editor: new Ext.form.ComboBox({
+							store: new Ext.data.SimpleStore({
+								fields: ['value', 'text'],
+								data: comboData
+							}),
+							emptyText: '请选择',
+							mode: 'local',
+							triggerAction: 'all',
+							valueField: 'value',
+							displayField: 'text',
+							editable: false
+						}),
+						renderer: function(value) {
+							return comboData[value][1];
+						}
+					}, {
+						header: '日期列',
+						dataIndex: 'date',
+						editor: new Ext.form.DateField({
+							format: 'Y-m-d',
+							minValue: '2007-12-14',
+							disabledDays: [0, 6],
+							disabledDaysText: '只能选择工作日'
+						}),
+						renderer: function(value) {
+							return Ext.Date.format(value, "Y-m-d");
+						}
+					}, {
+						xtype: 'checkcolumn',
+						text: '选择',
+						dataIndex: 'check',
+						listeners: {
+							checkchange: onCheckchange,
+							beforecheckchange: onBeforecheckchange
+						},
+						renderer: function(value, metaData, record, rowIndex, colIndex, store, view) {
+							return (new Ext.grid.column.CheckColumn).renderer(value);
+						}
+					},
+					{
+						text: '金额',
+						dataIndex: 'volume',
+						xtype: 'numbercolumn',
+						format: '0,000',
+						editor: new Ext.form.NumberField({
+							allowBlank: false,
+							hideTrigger: true,
+							allowNegative: false
+						})
+					}
+				];
+
+				function onCheckchange(CheckColumn, rowIndex, checked, eOpts) {
+					console.log('onCheckchange');
+				}
+
+				function onBeforecheckchange(CheckColumn, rowIndex, checked, eOpts) {
+					console.log('onBeforecheckchange');
+				}
+				// 放到grid里显示的原始数据
+				var data = [
+					[1, 1.1, 1, new Date(), true, 123456789],
+					[2, 2.2, 2, new Date(), false, 123456],
+					[3, 3.3, 0, new Date(), true, 123456],
+					[4, 4.4, 1, new Date(), false, 12345],
+					[5, 5.5, 2, new Date(), true, 123456]
+				];
+
+				var store = new Ext.data.ArrayStore({
+					data: data,
+					fields: [{
+							name: 'ID'
+						}, {
+							name: 'number'
+						},
+						{
+							name: 'combo'
+						},
+						{
+							name: 'date'
+						},
+						{
+							name: 'check'
+						},
+						{
+							name: 'volume',
+							type: 'number'
+						}
+					]
+				});
+				store.load();
+
+				var grid = new Ext.grid.GridPanel({
+					autoHeight: true,
+					renderTo: 'grid',
+					store: store,
+					columns: columns,
+					selType: 'cellmodel',
+					plugins: [
+						Ext.create('Ext.grid.plugin.CellEditing', {
+							clicksToEdit: 1
+						})
+					],
+					tbar: [{
+						text: '保存',
+						handler: function() {
+							var jsonArr = [];
+							var m = store.getModifiedRecords().slice(0);
+							Ext.each(m, function(item) {
+								jsonArr.push(item.data);
+							})
+							console.log(Ext.JSON.encode(jsonArr));
+						}
+					}]
+				});
+			});
+		</script>
+	</body>
+</html>
