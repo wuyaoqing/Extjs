@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=gbk">
+        <title>07.window</title>
+       <!-- 样式文件 -->
+       <link href="../ext/neptune/resources/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+       <!-- 核心文件 -->
+       <script src="../ext/ext-all-debug.js"></script>
+       <!-- 核心文件 -->
+       <script src="../ext/neptune/ext-theme-neptune-debug.js"></script>
+       <!-- 中文包 -->
+       <script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
+        <script type="text/javascript">
+Ext.onReady(function(){
+
+    var win = new Ext.Window({
+		title:'报表显示',
+        layout:'fit',
+        width:1000,
+        height:700,
+        closeAction:'hide',
+		draggable:true,
+         resizable:false,
+		html:'<iframe src="http://127.0.0.1:8080/ReportServer/Pages/ReportViewer.aspx?%2fReportProc%2fReport2&rs:Command=Render" width="985" height="600" scrolling="no"></iframe>',
+		constrain:true, //限制窗口不能超出界面
+        buttons: [{
+            text:'按钮'
+        }]
+    });
+    win.show();
+
+});
+        </script>
+    </head>
+    <body>
+        <div id="window-win"></div>
+    </body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ExtJs5.1测试</title>
+		<!-- 样式文件 -->
+		<link href="../ext/neptune/resources/ext-theme-neptune-all-debug.css" rel="stylesheet" type="text/css">
+		<!-- 核心文件 -->
+		<script src="../ext/ext-all-debug.js"></script>
+		<!-- 核心文件 -->
+		<script src="../ext/neptune/ext-theme-neptune-debug.js"></script>
+		<!-- 中文包 -->
+		<script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			Ext.onReady(function() {
+			 Ext.define('User', {
+			     extend: 'Ext.data.Model',
+			     fields: [
+			         {name: 'id', type: 'int'},
+			         {name: 'name',  type: 'string'}
+			     ]
+			 });
+			 
+			 var userStore = Ext.define('zsmy.User', {
+			      extend: 'Ext.data.Store',
+			      requires: [
+			          'Ext.data.proxy.Ajax',
+			          'Ext.data.reader.Json'
+			      ],
+			      constructor: function (cfg) {
+			          var me = this;
+			          cfg = cfg || {url:'users.json',autoLoad:true};
+			          me.callParent([Ext.apply({
+			              model: 'User',
+			              autoLoad: cfg.autoLoad,
+			              proxy: {
+			                  type: 'ajax',
+			                  url: cfg.url,
+			                  extraParams:cfg.params,
+			                  reader: {
+			                      type: 'json',
+			                      rootProperty: 'users',
+			                      totalProperty: 'total'  
+			                  }
+			              }
+			          }, cfg)]);
+			      }
+			  });
+			  
+			  Ext.create('Ext.form.ComboBox', {
+			      fieldLabel: '选择',
+			      store: new Ext.create('zsmy.User',{
+					  url:'users.json',
+					  autoLoad:true,
+					  params:{id:1,name:'qing'}
+				  }),
+			      queryMode: 'remote',
+			      displayField: 'name',
+			      valueField: 'id',
+			      renderTo: Ext.getBody()
+			  });
+			});
+		</script>
+	</body>
+</html>
