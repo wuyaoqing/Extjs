@@ -111,6 +111,7 @@
 						 'checkchange':function(node,checked,eOpts ){
 							 travelChildrenChecked(node, checked, eOpts);
 							 travelParentChecked(node, checked, eOpts);
+							 console.log(node.get("partNo"));
 						 }
 					 },
 					 tbar:[
@@ -119,7 +120,27 @@
 							 Ext.Array.each(checkRecord, function(rec){
 							            console.log(rec.get('partNo'));
 							  });
-						 }}
+						 }},
+						 {
+							 xtype:'button',text:'增加节点',handler:function(){
+								var treeNode = tree.getRootNode( );
+								var newNode = {
+									partNo:"3",
+									partName:"3",
+									partVer:"3.0",
+									checked:false,
+									leaf:false,
+									children:[{
+										partNo:"3-1",
+										partName:"3-1",
+										partVer:"3.1",
+										checked:false,
+										leaf:true
+									}]
+								};
+								treeNode.appendChild(newNode);
+							 }
+						 }
 					 ],
 				     columns: [{
 				         xtype: 'treecolumn',

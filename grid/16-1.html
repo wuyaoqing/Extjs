@@ -71,10 +71,10 @@
 						listeners: {
 							checkchange: onCheckchange,
 							beforecheckchange: onBeforecheckchange
-						},
-						renderer: function(value, metaData, record, rowIndex, colIndex, store, view) {
-							return (new Ext.grid.column.CheckColumn).renderer(value);
 						}
+						// renderer: function(value, metaData, record, rowIndex, colIndex, store, view) {
+						// 	return (new Ext.grid.column.CheckColumn).renderer(value);
+						// }
 					},
 					{
 						text: '金额',
@@ -99,7 +99,7 @@
 				// 放到grid里显示的原始数据
 				var data = [
 					[1, 1.1, 1, new Date(), true, 123456789],
-					[2, 2.2, 2, new Date(), false, 123456],
+					[2, 2.2, 2, new Date(), true, 123456],
 					[3, 3.3, 0, new Date(), true, 123456],
 					[4, 4.4, 1, new Date(), false, 12345],
 					[5, 5.5, 2, new Date(), true, 123456]

@@ -47,7 +47,8 @@
 							"partName":"2-1-2",
 							"partVer":"2.1.2",
 							"checked":false,
-							"leaf":true
+							"leaf":true,
+							"qtip":"2-1-2"
 						}
 					]
 				}
