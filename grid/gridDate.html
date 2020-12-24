@@ -11,6 +11,43 @@
 		<script src="../ext/neptune/ext-theme-neptune-debug.js"></script>
 		<!-- 中文包 -->
 		<script src="../ext/locale/ext-locale-zh_CN-debug.js" type="text/javascript"></script>
+		
+		<style type="text/css">
+		.lightToolbar {
+		background-color: #fff;
+		padding-top: 2px;
+		padding-bottom: 2px;
+		}
+
+		.lightToolbar .x-btn-inner-default-toolbar-small {
+		font: 9pt helvetica,arial,verdana,sans-serif;
+		color: #000;
+		}
+
+		.lightToolbar .x-btn-over .x-btn-inner-default-toolbar-small {
+		color: #fff;
+		}
+
+		.lightToolbar .x-form-file-btn, .lightToolbar .x-btn {
+		border: none;
+		background-image: none;
+		background-color: transparent;
+		}
+
+		.lightToolbar .x-form-file-btn .x-btn-inner-default-small, .lightToolbar .x-btn .x-btn-inner-default-small {
+			color: #000;
+			font-weight: normal;
+		}
+
+		.lightToolbar .x-btn-over {
+		background-color: #367bbe;
+		color: #fff;
+		}
+
+		.lightToolbar .x-btn-over .x-btn-inner-default-small {
+			color: #fff;
+		}
+		</style>
 	</head>
 	<body>
 		 <div id="grid"></div>
@@ -19,7 +56,7 @@
 		 	Ext.onReady(function(){
 		 	
 		 	    var columns = [
-		 	        {header:'编号',dataIndex:'id'},
+		 	        {header:'编号',dataIndex:'id',hidden:true},
 		 	        {header:'名称',dataIndex:'name'},
 		 	        {header:'描述',dataIndex:'descn'},
 		 	        {header:'日期',dataIndex:'date',width:150, renderer: Ext.util.Format.dateRenderer('Y-m-d H:i:s')}
@@ -48,7 +85,16 @@
 		 	        autoHeight: true,
 		 	        renderTo: 'grid',
 		 	        store: store,
-		 	        columns: columns
+		 	        columns: columns,
+					 style: 'border:1px solid #c1c1c1;',
+					 dockedItems: [{
+					        xtype: 'toolbar',
+					        dock: 'top',
+							cls: 'lightToolbar',
+					        items: [{
+					            text: '按钮'
+					        }]
+					    }]
 		 	    });
 		 	
 		 	});
