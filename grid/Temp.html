@@ -17,53 +17,158 @@
 		<script type="text/javascript">
 			Ext.onReady(function() {
 
-				
-				var columns = [
-				    {header:'编号',dataIndex:'id'},
-				    {header:'名称',dataIndex:'name'},
-				    {header:'描述',dataIndex:'descn'}
+				var comboData = [
+					[0, '新版ext教程'],
+					[1, 'ext在线支持'],
+					[2, 'ext扩展']
 				];
-				
+
+				var columns = [{
+						header: '行ID',
+						dataIndex: 'ID',
+					},{
+						header: '文字',
+						dataIndex: 'text',
+						editor:{
+							xtype:'textfield',
+							enforceMaxLength:true,
+							maxLength:5,
+							maxLengthText :'最多输入5',
+							allowBlank:false
+						}
+					}, {
+						header: '数字列',
+						dataIndex: 'number',
+						editor: new Ext.form.NumberField({
+							allowBlank: false,
+							allowNegative: false,
+							maxValue: 10
+						})
+					}, {
+						header: '选择列',
+						dataIndex: 'combo',
+						editor: new Ext.form.ComboBox({
+							store: new Ext.data.SimpleStore({
+								fields: ['value', 'text'],
+								data:[
+									[0, '新版ext教程'],
+									[1, 'ext在线支持'],
+									[2, 'ext扩展']
+								]
+							}),
+							emptyText: '请选择',
+							mode: 'local',
+							triggerAction: 'all',
+							valueField: 'value',
+							displayField: 'text',
+							editable: false
+						}),
+						renderer: function(value) {//渲染的时候显示
+							return comboData[value][1];
+						}
+					}, {
+						header: '日期列',
+						dataIndex: 'date',
+						editor: new Ext.form.DateField({
+							format: 'Y-m-d',
+							minValue: '2007-12-14',
+							disabledDays: [0, 6],
+							disabledDaysText: '只能选择工作日'
+						}),
+						renderer: function(value) {
+							return Ext.Date.format(value, "Y-m-d");
+						}
+					}, {
+						xtype: 'checkcolumn',
+						text: '选择',
+						dataIndex: 'check',
+						listeners: {
+							checkchange: onCheckchange,
+							beforecheckchange: onBeforecheckchange
+						},
+						renderer: function(value, metaData, record, rowIndex, colIndex, store, view) {
+							return (new Ext.grid.column.CheckColumn).renderer(value);
+						}
+					},
+					{
+						text: '金额',
+						dataIndex: 'volume',
+						xtype: 'numbercolumn',
+						format: '0,000',
+						editor: new Ext.form.NumberField({
+							allowBlank: false,
+							hideTrigger: true,
+							allowNegative: false
+						})
+					}
+				];
+
+				function onCheckchange(CheckColumn, rowIndex, checked, eOpts) {
+					console.log('onCheckchange');
+				}
+
+				function onBeforecheckchange(CheckColumn, rowIndex, checked, eOpts) {
+					console.log('onBeforecheckchange');
+				}
+				// 放到grid里显示的原始数据
 				var data = [
-				    ['1','name1','descn1'],
-				    ['2','name2','descn2'],
-				    ['3','name3','descn3'],
-				    ['4','name4','descn4'],
-				    ['5','name5','descn5']
+					[1,'文字列', 1.1, 1, new Date(), true, 123456789],
+					[2,'文字列', 2.2, 2, new Date(), false, 123456],
+					[3,'文字列', 3.3, 0, new Date(), true, 123456],
+					[4,'文字列', 4.4, 1, new Date(), false, 12345],
+					[5,'文字列', 5.5, 2, new Date(), true, 123456]
 				];
-				
+
 				var store = new Ext.data.ArrayStore({
 					data: data,
-					fields: [
-				        {name: 'id'},
-				        {name: 'name'},
-				        {name: 'descn'}
-				    ]
+					fields: [{
+							name: 'ID'
+						},{
+							name: 'text'
+						}, {
+							name: 'number'
+						},
+						{
+							name: 'combo'
+						},
+						{
+							name: 'date'
+						},
+						{
+							name: 'check'
+						},
+						{
+							name: 'volume',
+							type: 'number'
+						}
+					]
 				});
 				store.load();
-				
+
 				var grid = new Ext.grid.GridPanel({
-				    autoHeight: true,
-				    renderTo: 'grid',
-				    store: store,
-				    columns: columns
-				});
-				
-				var selectRecord;
-				var contextmenu = new Ext.menu.Menu({
-				    id: 'theContextMenu',
-				    items: [{
-				        text: '查看详情',
-				        handler: function(){
-							console.log(selectRecord.data);
-				        }
-				    }]
-				});
-				
-				grid.on("itemcontextmenu", function(view, record, item, index, e){
-				    e.preventDefault();
-					selectRecord = record;
-				    contextmenu.showAt(e.getXY());
+					autoHeight: true,
+					renderTo: 'grid',
+					store: store,
+					columns: columns,
+					selType: 'cellmodel',
+					plugins: [
+						Ext.create('Ext.grid.plugin.CellEditing', {
+							clicksToEdit: 1
+						})
+					],
+					tbar: [{
+						text: '保存',
+						handler: function() {
+							var jsonArr = [];
+							console.log( store.getModifiedRecords());
+							var m = store.getModifiedRecords().slice(0);
+							Ext.each(m, function(item) {
+								jsonArr.push(item.data);
+								
+							})
+							console.log(Ext.JSON.encode(jsonArr));
+						}
+					}]
 				});
 			});
 		</script>
