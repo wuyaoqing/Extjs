@@ -42,6 +42,7 @@
 			     callback: function(records, opts, success) {
 			 		 console.log(myStore.getCount()); //返回的是数据记录行数2
 			 		 console.log(myStore.getTotalCount());//返回是json数据的total字段20
+					 console.log(myStore.getAt(0).data.name);
 			     }
 			 });
 			 

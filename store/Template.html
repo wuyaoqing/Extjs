@@ -30,17 +30,18 @@
 			 ]
 			 
 			 var store = new Ext.data.ArrayStore({
-				 data:data,
+				 data:[],
 				 fields:[
 					 {name:'name',type:'string'},
 					 {name:'sex',type:'int'}
 				 ]
 			 });
 			 //增加
-			  var newUser = new User({
-				  name:'test',sex:5
-			  })
-			  store.add(newUser);
+			  // var newUser = new User({
+				 //  name:'test',sex:5
+			  // })
+			  // store.add(newUser);
+			  store.add({name:'222',sex:5});
 			 //遍历store
 			 for(var i=0;i<store.getCount();i++){
 				 var rowRecord = store.getAt(i); //行数据 Ext.data.Model对象

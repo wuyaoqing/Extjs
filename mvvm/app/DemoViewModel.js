@@ -9,11 +9,8 @@ Ext.define('app.view.DemoViewModel', {
     },
 	stores:{
 		user:{
-			fields:[ 'name', 'text'],
-			data: [
-				{ name: 'Lisa', text: '丽萨' },
-				{ name: 'Leijun', text: '雷军' }
-			]
+			fields:[ 'value', 'text'],
+			data: []
 		}
 	}
 });

@@ -59,12 +59,12 @@
 		 	        {header:'编号',dataIndex:'id',hidden:true},
 		 	        {header:'名称',dataIndex:'name'},
 		 	        {header:'描述',dataIndex:'descn'},
-		 	        {header:'日期',dataIndex:'date',width:150, renderer: Ext.util.Format.dateRenderer('Y-m-d H:i:s')}
+		 	        {header:'日期',dataIndex:'date',width:150,  xtype: 'datecolumn',   format:'Y-m-d H:i:s' }
 		 	    ];
 		 	
 		 	    var data = [
-		 	        ['1','name1','descn1','1970-01-15T02:58:04'],
-		 	        ['2','name2','descn2','1970-01-15T02:58:04'],
+		 	        ['1','name1','descn1','2021-01-15T10:43:00.163'],
+		 	        ['2','name2','descn2','2021-01-15T10:43:00.163'],
 		 	        ['3','name3','descn3','1970-01-15T02:58:04'],
 		 	        ['4','name4','descn4','1970-01-15T02:58:04'],
 		 	        ['5','name5','descn5','1970-01-15T02:58:04']

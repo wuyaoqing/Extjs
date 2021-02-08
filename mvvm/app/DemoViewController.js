@@ -7,7 +7,7 @@ Ext.define('app.view.DemoViewController', {
 	onAddComboData:function(){
 		//动态增加数据
 		var userstore = this.getView().getViewModel().get('user');
-		userstore.add({ name: 'mayun', text: '马云' })
+		userstore.add({ name: 'mayun', text: '马云2' })
 	},
 	onLoadMask:function(){
 		var usergrid = Ext.getCmp('usergrid');
